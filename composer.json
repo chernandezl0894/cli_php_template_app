@@ -1,0 +1,24 @@
+{
+    "name": "cristhianjhl/heartbeat",
+    "description": "Tiny CLI Apps",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "Core\\": "core/"
+        }
+    },
+    "authors": [
+        {
+            "name": "cristhianjhl.com",
+            "email": "cristhianjhl.web@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^3.12",
+        "vlucas/phpdotenv": "^5.7",
+        "php-di/php-di": "^7.1",
+        "symfony/console": "^7.4"
+    }
+}

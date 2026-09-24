@@ -1,0 +1,19 @@
+services:
+  php-cli:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    working_dir: /app
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      - APP_ENV=${APP_ENV:-development}
+      - COMPOSER_HOME=/tmp/composer
+    tty: true
+    stdin_open: true

@@ -23,7 +23,6 @@ final class ScheduleRunCommand extends Command
     public function __construct(
         private Scheduler $scheduler,
         private Kernel $kernel,
-        private ContainerInterface $container
     ) {
         parent::__construct();
     }
@@ -32,7 +31,9 @@ final class ScheduleRunCommand extends Command
     {
         $output->writeln('<info>⏱️ Ejecutando ciclo del Scheduler...</info>');
 
-        $this->kernel->schedule($this->scheduler, $this->container);
+        $app = $this->getApplication();
+
+        $this->kernel->schedule($this->scheduler, $app);
 
         $this->scheduler->run();
 

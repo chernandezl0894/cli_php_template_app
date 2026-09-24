@@ -17,3 +17,18 @@ services:
       - COMPOSER_HOME=/tmp/composer
     tty: true
     stdin_open: true
+
+  #  Servicio dedicado que actúa como Cron dentro de Docker
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - .:/app
+    # Bucle ligero en Bash que ejecuta schedule:run cada 60 segundos
+    command: >
+      sh -c "while true; do
+        php consoles/app.php schedule:run;
+        sleep 60;
+      done"
+    restart: always

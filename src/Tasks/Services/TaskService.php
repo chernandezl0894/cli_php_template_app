@@ -40,7 +40,7 @@ final class TaskService
         $processedCount = 0;
 
         foreach ($pendingTasks as $task) {
-            $message = "⏰ <b>REMINDER:</b> {$task->title}\n";
+            $message = "⏰ <b>Reminder:</b> {$task->title}\n";
             if ($task->description) {
                 $message .= "📝 {$task->description}\n";
             }

@@ -12,12 +12,10 @@ final class Kernel
 {
     public function schedule(Scheduler $scheduler, Application $application): void
     {
-        // ⏰ Process reminders every minute
+        // Process reminders every minute
         $scheduler->call(function () use ($application) {
             $command = $application->find('app:task:process-reminders');
             $command->run(new ArrayInput([]), new NullOutput());
         }, '* * * * *');
-
-        $scheduler->run();
     }
 }

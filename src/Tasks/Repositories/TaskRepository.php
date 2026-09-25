@@ -6,6 +6,7 @@ namespace App\Tasks\Repositories;
 
 use App\Tasks\DTOs\CreateTaskData;
 use App\Tasks\Entities\Task;
+use App\Tasks\Exceptions\TaskNotFoundException;
 use Core\Database;
 use DateTimeImmutable;
 
@@ -38,7 +39,11 @@ final class TaskRepository
         $stmt = $this->db->query("SELECT * FROM tasks WHERE id = :id", ['id' => $id]);
         $row = $stmt->fetch();
 
-        return $row ? Task::fromArray($row) : null;
+        if (!$row) {
+            throw TaskNotFoundException::withId($id);
+        }
+
+        return Task::fromArray($row);
     }
 
     /**

@@ -33,6 +33,13 @@ final class TaskService
         return $task;
     }
 
+    public function getTaskById(int $id): Task
+    {
+        $task = $this->repository->findById($id);
+
+        return $task;
+    }
+
     public function processDueReminders(): int
     {
         $now = new DateTimeImmutable();

@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-use Core\Config;
+use Core\ContainerFactory;
 use Core\LoggerService;
 use Dotenv\Dotenv;
 
 define("BASE_PATH", __DIR__);
 
 require __DIR__ . "/vendor/autoload.php";
+
+$container = ContainerFactory::create();
 
 mb_internal_encoding('UTF-8');
 
@@ -30,21 +32,19 @@ set_error_handler(static function (int $severity, string $message, string $file,
     throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
-set_exception_handler(static function (Throwable $exception): void {
+set_exception_handler(static function (Throwable $exception) use ($container): void {
     try {
-        $config = new Config(BASE_PATH . '/config');
-        $logger = new LoggerService($config);
-        $logger->error($exception->getMessage(), [
+        $logger = $container->get(LoggerService::class);
+        $logger->critical($exception->getMessage(), [
             'file'  => $exception->getFile(),
             'line'  => $exception->getLine(),
             'trace' => $exception->getTraceAsString(),
         ]);
     } catch (Throwable $e) {
-        // Fallback si falla el logger
         error_log("Critical failure in Exception Handler: " . $e->getMessage());
     }
 
     fwrite(STDERR, "[CRITICAL ERROR]: {$exception->getMessage()}\n");
-    fwrite(STDERR, "\tEn: {$exception->getFile()}:{$exception->getLine()}\n");
+    fwrite(STDERR, "\tAt: {$exception->getFile()}:{$exception->getLine()}\n");
     exit(1);
 });

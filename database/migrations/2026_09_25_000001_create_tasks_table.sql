@@ -6,6 +6,9 @@ CREATE TABLE IF NOT EXISTS tasks (
     due_date DATETIME NULL,
     reminder_at DATETIME NULL,
     reminder_sent INTEGER NOT NULL DEFAULT 0,
+    is_recurring INTEGER NOT NULL DEFAULT 0,
+    recurrence_pattern TEXT NOT NULL DEFAULT 'daily',-- 'daily', 'weekly', 'monthly'
+    next_ocurrence_at DATETIME DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

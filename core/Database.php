@@ -12,15 +12,24 @@ final class Database
     private ?PDO $connection = null;
 
     public function __construct(
-        private Config $config
-    ) {}
+        private ?Config $config = null,
+        ?PDO $connection = null
+    ) {
+        if ($connection !== null) {
+            $this->connection = $connection;
+        }
+    }
 
     public function getConnection(): PDO
     {
         if ($this->connection === null) {
-            $driver = $this->config->get('database.driver', 'sqlite');
+            if ($this->config === null) {
+                throw new \RuntimeException("A Config instance is required if a PDO is not provided.");
+            }
+
+            $driver   = $this->config->get('database.driver', 'sqlite');
             $database = $this->config->get('database.database');
-            $options = $this->config->get('database.options', []);
+            $options  = $this->config->get('database.options', []);
 
             $dir = dirname($database);
             if (!is_dir($dir)) {
@@ -29,20 +38,6 @@ final class Database
 
             $dsn = "{$driver}:{$database}";
             $this->connection = new PDO($dsn, null, null, $options);
-
-            $this->connection->exec("
-            CREATE TABLE IF NOT EXISTS tasks (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                description TEXT,
-                status TEXT NOT NULL DEFAULT 'inbox',
-                due_date DATETIME NULL,
-                reminder_at DATETIME NULL,
-                reminder_sent INTEGER NOT NULL DEFAULT 0,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-        ");
         }
 
         return $this->connection;

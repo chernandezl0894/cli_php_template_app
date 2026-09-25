@@ -29,4 +29,6 @@ interface TaskRepository
     public function findPendingReminders(DateTimeImmutable $now): array;
 
     public function markReminderAsSent(int $id): void;
+
+    public function cancelTaskById(int $id): Task;
 }

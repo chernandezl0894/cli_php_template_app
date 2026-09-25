@@ -6,6 +6,7 @@ require __DIR__ . "/../bootstrap.php";
 
 use App\Greet\Commands\GreetCommand;
 use App\Heartbeat\Commands\HeartbeatCommand;
+use App\Shared\Commands\MigrateCommand;
 use App\Shared\Commands\ScheduleRunCommand;
 use App\Tasks\Commands\CreateTaskCommand;
 use App\Tasks\Commands\ShowTaskCommand;
@@ -22,5 +23,6 @@ $application->addCommand($container->get(ShowTaskCommand::class));
 $application->addCommand($container->get(ListTasksCommand::class));
 $application->addCommand($container->get(ProcessRemindersCommand::class));
 $application->addCommand($container->get(ScheduleRunCommand::class));
+$application->addCommand($container->get(MigrateCommand::class));
 
 $application->run();

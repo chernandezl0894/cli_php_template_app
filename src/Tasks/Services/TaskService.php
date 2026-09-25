@@ -48,6 +48,11 @@ final class TaskService
         return $task;
     }
 
+    public function cancelTaskById(int $id): Task
+    {
+        return $this->repository->cancelTaskById($id);
+    }
+
     public function processDueReminders(): int
     {
         $now = new DateTimeImmutable();

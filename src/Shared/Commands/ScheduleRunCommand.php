@@ -29,7 +29,7 @@ final class ScheduleRunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>⏱️ Ejecutando ciclo del Scheduler...</info>');
+        $output->writeln('<info>⏱️ Executing Scheduler cycle...</info>');
 
         $app = $this->getApplication();
 
@@ -37,7 +37,7 @@ final class ScheduleRunCommand extends Command
 
         $this->scheduler->run();
 
-        $output->writeln('<info>✅ Ciclo finalizado.</info>');
+        $output->writeln('<info>✅ Cycle complete.</info>');
 
         return Command::SUCCESS;
     }

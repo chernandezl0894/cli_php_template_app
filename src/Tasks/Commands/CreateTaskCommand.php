@@ -22,7 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class CreateTaskCommand extends Command
 {
     public function __construct(
-        private TaskService $taskService
+        private TaskService $service
     ) {
         parent::__construct();
     }
@@ -54,7 +54,7 @@ final class CreateTaskCommand extends Command
             reminderAt: $reminderAt
         );
 
-        $task = $this->taskService->createTask($dto);
+        $task = $this->service->createTask($dto);
 
         $io->success("Task #{$task->id} created successfully!");
         $io->definitionList(

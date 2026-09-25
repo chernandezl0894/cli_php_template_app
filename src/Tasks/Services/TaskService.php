@@ -19,6 +19,14 @@ final class TaskService
         private TelegramService $telegram
     ) {}
 
+    /**
+     * @return Task[]
+     */
+    public function findAllTasks(): array
+    {
+        return $this->repository->findAll();
+    }
+
     public function createTask(CreateTaskData $data): Task
     {
         $task = $this->repository->create($data);

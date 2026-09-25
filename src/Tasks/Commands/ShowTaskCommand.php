@@ -23,7 +23,7 @@ final class ShowTaskCommand extends Command
 {
     public function __construct(
         private LoggerService $logger,
-        private TaskService $taskService
+        private TaskService $service
     ) {
         parent::__construct();
     }
@@ -39,7 +39,7 @@ final class ShowTaskCommand extends Command
         $taskId = (int) $input->getArgument('id');
 
         try {
-            $task = $this->taskService->getTaskById($taskId);
+            $task = $this->service->getTaskById($taskId);
 
             $io->title("📋 Task details #{$task->id}");
             $io->definitionList(
@@ -51,12 +51,10 @@ final class ShowTaskCommand extends Command
 
             $this->logger->info("Task #{$task->id} showed successfully.");
             return Command::SUCCESS;
-
         } catch (TaskNotFoundException $e) {
             $this->logger->warning($e->getMessage(), ['task_id' => $taskId]);
             $io->warning($e->getMessage());
             return Command::FAILURE;
-
         } catch (\Throwable $e) {
             $this->logger->critical("Unexpected error: " . $e->getMessage(), [
                 'file' => $e->getFile(),

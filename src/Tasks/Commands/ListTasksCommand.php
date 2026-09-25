@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tasks\Commands;
 
 use App\Tasks\Repositories\TaskRepository;
+use App\Tasks\Services\TaskService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class ListTasksCommand extends Command
 {
     public function __construct(
-        private TaskRepository $taskRepository
+        private TaskService $service,
     ) {
         parent::__construct();
     }
@@ -27,8 +28,7 @@ final class ListTasksCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // Obtenemos todas las tareas desde el repositorio
-        $tasks = $this->taskRepository->findAll();
+        $tasks = $this->service->findAllTasks();
 
         if (empty($tasks)) {
             $io->warning('No tasks found in the database.');

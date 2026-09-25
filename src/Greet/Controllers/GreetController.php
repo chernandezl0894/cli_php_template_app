@@ -8,7 +8,9 @@ use Core\LoggerService;
 
 class GreetController
 {
-    public function __construct(protected LoggerService $loggerService) {}
+    public function __construct(protected LoggerService $loggerService)
+    {
+    }
 
     public function run(?string $name): void
     {

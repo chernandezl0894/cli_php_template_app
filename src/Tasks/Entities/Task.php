@@ -22,7 +22,8 @@ final class Task
         public RecurrencePatternEnum $recurrencePattern, // daily, weekly, monthly
         public ?DateTimeImmutable $nextOccurrenceAt,
         public ?DateTimeImmutable $createdAt = null
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -35,8 +36,9 @@ final class Task
             reminderAt: isset($data['reminder_at']) ? new DateTimeImmutable($data['reminder_at']) : null,
             reminderSent: (bool) ($data['reminder_sent'] ?? false),
             isRecurring: (bool) ($data['is_recurring'] ?? false),
-            recurrencePattern: RecurrencePatternEnum::tryFrom($data['recurrence_pattern']) ?? RecurrencePatternEnum::DAILY,
-            nextOccurrenceAt: isset($data['next_ocurrence_at']) && $data['next_ocurrence_at'] !== null
+            recurrencePattern: RecurrencePatternEnum::tryFrom($data['recurrence_pattern'])
+                ?? RecurrencePatternEnum::DAILY,
+            nextOccurrenceAt: isset($data['next_ocurrence_at']) && $data['next_ocurrence_at']
                 ? new DateTimeImmutable($data['next_ocurrence_at'])
                 : null,
             createdAt: isset($data['created_at']) ? new DateTimeImmutable($data['created_at']) : null

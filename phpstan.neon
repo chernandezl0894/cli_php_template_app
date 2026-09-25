@@ -1,0 +1,12 @@
+parameters:
+    level: 4
+    paths:
+        - src
+        - core
+        - consoles
+
+    bootstrapFiles:
+        - bootstrap.php
+
+    excludePaths:
+        - vendor/*

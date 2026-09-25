@@ -38,7 +38,7 @@ final class ListTasksCommand extends Command
         $rows = array_map(fn($t) => [
             $t->id,
             $t->title,
-            $t->status,
+            $t->status->value,
             $t->reminderAt?->format('Y-m-d H:i:s') ?? '-',
             $t->reminderSent ? '✅ Yes' : '⏳ Pending',
         ], $tasks);

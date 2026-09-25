@@ -17,7 +17,8 @@ final class TaskService
         private TaskRepository $repository,
         private LoggerService $logger,
         private TelegramService $telegram
-    ) {}
+    ) {
+    }
 
     /**
      * @return Task[]
@@ -71,7 +72,10 @@ final class TaskService
             $sent = $this->telegram->send($message);
 
             if ($sent) {
-                $this->logger->info("Telegram reminder sent for task #{$task->id}");
+                $this->logger->info("Telegram reminder sent for task #{$task->id}", [
+                    'task_id' => $task->id,
+                    'pattern' => $task->recurrencePattern->value,
+                ]);
                 $this->repository->markReminderAsSent($task->id);
                 $processedCount++;
             }

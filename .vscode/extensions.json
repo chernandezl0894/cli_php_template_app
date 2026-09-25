@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "bmewburn.vscode-intelephense-client",
+        "shevaua.phpcs",
+        "SanderRonde.phpstan-vscode",
+        "persoderlind.vscode-phpcbf"
+    ]
+}

@@ -13,7 +13,9 @@ final class Scheduler
     /** @var Event[] */
     private array $events = [];
 
-    public function __construct(private LoggerService $logger) {}
+    public function __construct(private LoggerService $logger)
+    {
+    }
 
     public function call(Closure $action, string $expression): Event
     {
@@ -34,7 +36,7 @@ final class Scheduler
         }
 
         if ($executedCount > 0) {
-            $this->logger->info("The scheduler processed {$executedCount} task(s) this minute.");
+            $this->logger->cron("The scheduler processed {$executedCount} task(s) this minute.");
         }
     }
 }

@@ -16,21 +16,31 @@ final class TaskSqliteRepository implements TaskRepository
 {
     public function __construct(
         private Database $db
-    ) {}
+    ) {
+    }
 
     public function create(CreateTaskData $data): Task
     {
-        $nextOccurrence = null;
-        if ($data->isRecurring && $data->reminderAt !== null) {
-            $nextOccurrence = $this->calculateNextDate($data->reminderAt, $data->recurrencePattern);
-        }
+        $nextOccurrence = $data->isRecurring ? $data->reminderAt : null;
 
         $sql = "INSERT INTO tasks (
-                    title, description, status, due_date, reminder_at,
-                    is_recurring, recurrence_pattern, next_ocurrence_at
+                    title,
+                    description,
+                    status,
+                    due_date,
+                    reminder_at,
+                    is_recurring,
+                    recurrence_pattern,
+                    next_ocurrence_at
                 ) VALUES (
-                    :title, :description, :status, :due_date, :reminder_at,
-                    :is_recurring, :recurrence_pattern, :next_ocurrence_at
+                    :title,
+                    :description,
+                    :status,
+                    :due_date,
+                    :reminder_at,
+                    :is_recurring,
+                    :recurrence_pattern,
+                    :next_ocurrence_at
                 )";
 
         $this->db->query($sql, [
@@ -139,13 +149,14 @@ final class TaskSqliteRepository implements TaskRepository
         }
     }
 
-    private function calculateNextDate(DateTimeImmutable $currentDate, RecurrencePatternEnum $pattern): DateTimeImmutable
-    {
+    private function calculateNextDate(
+        DateTimeImmutable $currentDate,
+        RecurrencePatternEnum $pattern,
+    ): DateTimeImmutable {
         $modifier = match ($pattern) {
-            'daily'   => '+1 day',
-            'weekly'  => '+1 week',
-            'monthly' => '+1 month',
-            default   => '+1 day',
+            RecurrencePatternEnum::WEEKLY => '+1 week',
+            RecurrencePatternEnum::MONTHLY => '+1 month',
+            RecurrencePatternEnum::DAILY => '+1 day',
         };
 
         return $currentDate->modify($modifier);

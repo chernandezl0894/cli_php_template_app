@@ -1,0 +1,28 @@
+{
+    "editor.rulers": [
+        120
+    ],
+    // 🧹 Formateo automático al guardar el archivo
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    // 📐 Configuración de PHP CodeSniffer / PHPCBF
+    "phpcs.enable": true,
+    "phpcs.executablePath": "./vendor/bin/phpcs",
+    "phpcs.standard": "phpcs.xml",
+    // 🪄 Corrección automática de formato mediante PHPCBF al guardar
+    "phpcbf.enable": true,
+    "phpcbf.executablePath": "./vendor/bin/phpcbf",
+    "phpcbf.standard": "phpcs.xml",
+    "phpcbf.onsave": true,
+    // 🧠 Configuración de PHPStan para análisis estático en tiempo real
+    "phpstan.enabled": true,
+    "phpstan.binPath": "./vendor/bin/phpstan",
+    "phpstan.configFile": "phpstan.neon",
+    // 🎨 Formato visual de líneas y reglas de estilo PHP
+    "[php]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+    }
+}

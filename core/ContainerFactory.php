@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Core;
 
-use App\Tasks\Repositories\TaskInMemoryRepository;
 use App\Tasks\Repositories\TaskRepository;
 use App\Tasks\Repositories\TaskSqliteRepository;
 use DI\ContainerBuilder;
@@ -25,7 +24,8 @@ final class ContainerFactory
         // NOTE. Si quisiéramos definir alias para interfaces o configuraciones personalizadas:
         $builder->addDefinitions([
             Config::class => create(Config::class)->constructor(BASE_PATH . "/config"),
-            Database::class => autowire(Database::class),
+            Database::class => autowire(Database::class)
+                ->constructorParameter('config', get(Config::class)),
             TaskRepository::class => get(TaskSqliteRepository::class),
         ]);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Core;
 
+use DateTimeImmutable;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
@@ -25,7 +26,7 @@ final class LoggerService
         $output = "[%datetime%][%level_name%] - %message% %context% %extra%\n";
         $formatter = new LineFormatter($output, $dateFormat);
 
-        $appHandler = new RotatingFileHandler("{$path}/app.log", $days,  Level::Info);
+        $appHandler = new RotatingFileHandler("{$path}/app.log", $days, Level::Info);
         $appHandler->setFormatter($formatter);
 
         $this->appLogger = new Logger('app');
@@ -48,6 +49,11 @@ final class LoggerService
         $this->appLogger->error($message, $context);
     }
 
+    public function cron(string $message, array $context = []): void
+    {
+        $this->log('CRON', $message, $context);
+    }
+
     public function warning(string $message, array $context = []): void
     {
         $this->appLogger->warning($message, $context);
@@ -56,5 +62,22 @@ final class LoggerService
     public function critical(string $message, array $context = []): void
     {
         $this->appLogger->critical($message, $context);
+    }
+
+    private function log(string $level, string $message, array $context = []): void
+    {
+        $path = $this->config->get('logging.path');
+        $date = (new DateTimeImmutable())->format('Y-m-d H:i:s');
+        $contextJson = !empty($context) ? json_encode($context) : '[]';
+
+        $formattedMessage = sprintf(
+            "[%s][%s] - %s %s\n",
+            $date,
+            $level, // 👈 Imprimirá [CRON], [INFO] o [CRITICAL]
+            $message,
+            $contextJson
+        );
+
+        file_put_contents("{$path}/app.log", $formattedMessage, FILE_APPEND);
     }
 }

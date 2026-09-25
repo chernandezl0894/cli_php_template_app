@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset name="CustomPHPCS">
+    <description>Configuración ligera de linters para Clean Code PHP</description>
+
+    <!-- Carpeta a analizar -->
+    <file>src</file>
+    <file>core</file>
+    <file>consoles</file>
+
+    <!-- Excluir carpetas de terceros y temporales -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+
+    <!-- Estándar PSR-12 (formato estándar de PHP) -->
+    <rule ref="PSR12"/>
+
+    <!-- Mostrar colores en la consola -->
+    <arg value="p"/>
+    <arg name="colors"/>
+</ruleset>

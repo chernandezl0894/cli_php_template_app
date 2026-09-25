@@ -48,3 +48,5 @@ set_exception_handler(static function (Throwable $exception) use ($container): v
     fwrite(STDERR, "\tAt: {$exception->getFile()}:{$exception->getLine()}\n");
     exit(1);
 });
+
+return $container;

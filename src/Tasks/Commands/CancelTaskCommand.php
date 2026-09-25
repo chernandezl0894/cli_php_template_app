@@ -20,7 +20,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class CancelTaskCommand extends Command
 {
     public function __construct(
-        private Database $db,
         private TaskRepository $taskRepository,
         private TaskService $service,
     ) {

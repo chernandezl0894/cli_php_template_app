@@ -15,7 +15,9 @@ final class TaskInMemoryRepository implements TaskRepository
     private array $tasks = [];
     private int $autoIncrement = 1;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function create(CreateTaskData $data): Task
     {
@@ -72,7 +74,7 @@ final class TaskInMemoryRepository implements TaskRepository
             return $task->reminderAt !== null
                 && $task->reminderAt <= $now
                 && !$task->reminderSent
-                && $task->status !== 'done';
+                && $task->status !== StatusEnum::DONE;
         });
     }
 
@@ -139,13 +141,14 @@ final class TaskInMemoryRepository implements TaskRepository
         return $updatedTask;
     }
 
-    private function calculateNextDate(DateTimeImmutable $currentDate, RecurrencePatternEnum $pattern): DateTimeImmutable
-    {
+    private function calculateNextDate(
+        DateTimeImmutable $currentDate,
+        RecurrencePatternEnum $pattern,
+    ): DateTimeImmutable {
         $modifier = match ($pattern) {
-            'daily'   => '+1 day',
-            'weekly'  => '+1 week',
-            'monthly' => '+1 month',
-            default   => '+1 day',
+            RecurrencePatternEnum::WEEKLY => '+1 week',
+            RecurrencePatternEnum::MONTHLY => '+1 month',
+            RecurrencePatternEnum::DAILY => '+1 day',
         };
 
         return $currentDate->modify($modifier);

@@ -8,7 +8,7 @@ use App\Tasks\DTOs\CreateTaskData;
 use App\Tasks\Enums\RecurrencePatternEnum;
 use App\Tasks\Enums\StatusEnum;
 use App\Tasks\Services\TaskService;
-use DateTimeImmutable;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use DateTimeImmutable;
 
 #[AsCommand(
     name: 'app:task:create',
@@ -35,9 +36,14 @@ final class CreateTaskCommand extends Command
             ->addArgument('title', InputArgument::REQUIRED, 'Task title')
             ->addOption('desc', 'd', InputOption::VALUE_REQUIRED, 'Task description')
             ->addOption('status', 's', InputOption::VALUE_REQUIRED, 'GTD Status (inbox, next_action, waiting)', 'inbox')
-            ->addOption('reminder', 'r', InputOption::VALUE_REQUIRED, 'Reminder date/time (e.g., "2026-09-23 18:00:00" or "+5 minutes")')
+            ->addOption(
+                name: 'reminder',
+                shortcut: 'r',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Reminder date/time (e.g., "2026-09-23 18:00:00" or "+5 minutes")'
+            )
             ->addOption('recurring', null, InputOption::VALUE_NONE, 'Is a reccurrent task')
-            ->addOption('pattern', 'p', InputOption::VALUE_OPTIONAL, 'Pattern (daily, weekly, monthly)', 'daily');
+            ->addOption('pattern', 'p', InputOption::VALUE_OPTIONAL, 'Pattern (once, daily, weekly, monthly)', 'once');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -52,24 +58,39 @@ final class CreateTaskCommand extends Command
 
         $reminderStr = $input->getOption('reminder');
         $reminderAt = $reminderStr ? new DateTimeImmutable($reminderStr) : null;
-
+        $isRecurring = $pattern !== RecurrencePatternEnum::ONCE;
 
         $data = new CreateTaskData(
-            title: $input->getArgument('title'),
+            title: trim($input->getArgument('title')),
             description: $input->getOption('desc'),
             status: $status,
-            isRecurring: (bool) $input->getOption('recurring'),
+            isRecurring: $isRecurring,
             recurrencePattern: $pattern,
             reminderAt: $reminderAt
         );
 
 
+        $validator = Validation::createValidatorBuilder()
+            ->enableAttributeMapping()
+            ->getValidator();
+
+        $violations = $validator->validate($data);
+
+        if (count($violations) > 0) {
+            foreach ($violations as $violation) {
+                $io->error($violation->getMessage());
+            }
+
+            return Command::FAILURE;
+        }
+
         $task = $this->service->createTask($data);
+
 
         $io->success("Task #{$task->id} created successfully!");
         $io->definitionList(
             ['Title' => $task->title],
-            ['Status' => $task->status],
+            ['Status' => $task->status->value],
             ['Reminder' => $task->reminderAt?->format('Y-m-d H:i:s') ?? 'None']
         );
 

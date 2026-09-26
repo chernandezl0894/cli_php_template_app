@@ -2,7 +2,7 @@ services:
   php-cli:
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.local
       args:
         UID: ${UID:-1000}
         GID: ${GID:-1000}

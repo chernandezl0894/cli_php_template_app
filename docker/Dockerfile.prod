@@ -1,0 +1,37 @@
+# ==========================================
+# ETAPA 1: Compilación de dependencias (Builder)
+# ==========================================
+FROM php:8.2-cli-alpine AS builder
+
+# Instalamos Composer y herramientas para instalar extensiones
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN apk add --no-cache git unzip
+
+WORKDIR /app
+
+# Copiamos solo los archivos de dependencias para aprovechar la caché de Docker
+COPY composer.json composer.lock ./
+
+# Instalamos SOLO dependencias de producción (sin herramientas de dev)
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Copiamos el resto del código
+COPY . .
+
+# ==========================================
+# ETAPA 2: Imagen final de Producción (Runner)
+# ==========================================
+FROM php:8.2-cli-alpine
+
+# Instalamos extensiones necesarias en ejecución (ej. pdo_pgsql o pdo_mysql)
+RUN docker-php-ext-install pdo pdo_mysql
+
+WORKDIR /app
+
+# Copiamos la aplicación y dependencias optimizadas desde la etapa 'builder'
+COPY --from=builder /app /app
+
+# Usuario no-root por seguridad 🛡️
+USER www-data
+
+CMD ["php", "bin/console"]

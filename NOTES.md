@@ -85,3 +85,10 @@
 1. `SELECT * FROM tasks;`
 2. `SELECT COUNT(*) FROM tasks;`
 3. `SELECT id, title, status, is_recurring FROM tasks WHERE id = 1;`
+
+## Terraform
+
+### Commands
+
+1. `docker run --rm -v $(pwd)/terraform:/workspace -w /workspace hashicorp/terraform:latest init`
+2. `docker run --rm -v $(pwd)/terraform:/workspace -w /workspace hashicorp/terraform:latest validate`

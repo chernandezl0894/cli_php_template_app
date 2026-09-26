@@ -14,7 +14,7 @@ class GreetController
 
     public function run(?string $name): void
     {
-        $target = $name ??= "Unknown";
+        $target = $name ??= 'Unknown';
         $this->loggerService->info("Hello, {$target}! Welcome to the tiny CLI App.", [
             'target_user' => $target,
             'execution_mode' => 'CLI'

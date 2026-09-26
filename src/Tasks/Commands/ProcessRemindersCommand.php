@@ -31,7 +31,7 @@ final class ProcessRemindersCommand extends Command
         if ($processed > 0) {
             $io->success("Processed {$processed} reminder(s).");
         } else {
-            $io->info("No pending reminders found.");
+            $io->info('No pending reminders found.');
         }
 
         return Command::SUCCESS;

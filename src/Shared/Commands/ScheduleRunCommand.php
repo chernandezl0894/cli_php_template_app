@@ -6,7 +6,6 @@ namespace App\Shared\Commands;
 
 use Core\Kernel;
 use Core\Scheduler;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

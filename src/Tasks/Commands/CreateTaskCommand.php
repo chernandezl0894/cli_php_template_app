@@ -8,7 +8,7 @@ use App\Tasks\DTOs\CreateTaskData;
 use App\Tasks\Enums\RecurrencePatternEnum;
 use App\Tasks\Enums\StatusEnum;
 use App\Tasks\Services\TaskService;
-use Symfony\Component\Validator\Validation;
+use DateTimeImmutable;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use DateTimeImmutable;
+use Symfony\Component\Validator\Validation;
 
 #[AsCommand(
     name: 'app:task:create',
@@ -57,7 +57,14 @@ final class CreateTaskCommand extends Command
         $pattern = RecurrencePatternEnum::tryFrom($patternStr) ?? RecurrencePatternEnum::DAILY;
 
         $reminderStr = $input->getOption('reminder');
-        $reminderAt = $reminderStr ? new DateTimeImmutable($reminderStr) : null;
+
+        try {
+            $reminderAt = $reminderStr ? new DateTimeImmutable($reminderStr) : null;
+        } catch (\Exception $e) {
+            $io->error('The date and time format is invalid. Try formats such as "2026-10-01 10:00:00" or "+1 minute".');
+            return Command::FAILURE;
+        }
+
         $isRecurring = $pattern !== RecurrencePatternEnum::ONCE;
 
         $data = new CreateTaskData(

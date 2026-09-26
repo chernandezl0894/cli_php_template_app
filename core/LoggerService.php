@@ -22,7 +22,7 @@ final class LoggerService
         $days = $this->config->get('logging.days', 14);
         $environment = $this->config->get('app.env', 'production');
 
-        $dateFormat = "Y-m-d H:i:s";
+        $dateFormat = 'Y-m-d H:i:s';
         $output = "[%datetime%][%level_name%] - %message% %context% %extra%\n";
         $formatter = new LineFormatter($output, $dateFormat);
 

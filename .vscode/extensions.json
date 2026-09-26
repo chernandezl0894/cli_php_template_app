@@ -3,6 +3,7 @@
         "bmewburn.vscode-intelephense-client",
         "shevaua.phpcs",
         "SanderRonde.phpstan-vscode",
-        "persoderlind.vscode-phpcbf"
+        "persoderlind.vscode-phpcbf",
+        "junstyle.php-cs-fixer"
     ]
 }

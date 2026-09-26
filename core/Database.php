@@ -24,7 +24,7 @@ final class Database
     {
         if ($this->connection === null) {
             if ($this->config === null) {
-                throw new \RuntimeException("A Config instance is required if a PDO is not provided.");
+                throw new \RuntimeException('A Config instance is required if a PDO is not provided.');
             }
 
             $driver   = $this->config->get('database.driver', 'sqlite');

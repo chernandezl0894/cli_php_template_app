@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tasks\Commands;
 
-use App\Tasks\Exceptions\TaskDomainException;
 use App\Tasks\Exceptions\TaskNotFoundException;
 use App\Tasks\Services\TaskService;
 use Core\LoggerService;
@@ -56,11 +55,11 @@ final class ShowTaskCommand extends Command
             $io->warning($e->getMessage());
             return Command::FAILURE;
         } catch (\Throwable $e) {
-            $this->logger->critical("Unexpected error: " . $e->getMessage(), [
+            $this->logger->critical('Unexpected error: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
-            $io->error("An unexpected system error occurred.");
+            $io->error('An unexpected system error occurred.');
             return Command::FAILURE;
         }
     }

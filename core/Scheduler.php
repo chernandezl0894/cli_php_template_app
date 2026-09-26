@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Core;
 
-use Core\Event;
-use Core\LoggerService;
 use Closure;
 
 final class Scheduler

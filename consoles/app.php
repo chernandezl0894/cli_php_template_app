@@ -9,10 +9,10 @@ use App\Heartbeat\Commands\HeartbeatCommand;
 use App\Shared\Commands\MigrateCommand;
 use App\Shared\Commands\ScheduleRunCommand;
 use App\Tasks\Commands\CreateTaskCommand;
-use App\Tasks\Commands\ShowTaskCommand;
 use App\Tasks\Commands\ListTasksCommand;
 use App\Tasks\Commands\ProcessRemindersCommand;
 use App\Tasks\Commands\ShellCommand;
+use App\Tasks\Commands\ShowTaskCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application('Mi Microframework CLI', '1.0.0');

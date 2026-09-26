@@ -23,7 +23,7 @@ final class TaskSqliteRepository implements TaskRepository
     {
         $nextOccurrence = $data->isRecurring ? $data->reminderAt : null;
 
-        $sql = "INSERT INTO tasks (
+        $sql = 'INSERT INTO tasks (
                     title,
                     description,
                     status,
@@ -41,7 +41,7 @@ final class TaskSqliteRepository implements TaskRepository
                     :is_recurring,
                     :recurrence_pattern,
                     :next_ocurrence_at
-                )";
+                )';
 
         $this->db->query($sql, [
             'title'              => $data->title,
@@ -61,7 +61,7 @@ final class TaskSqliteRepository implements TaskRepository
 
     public function findById(int $id): Task
     {
-        $stmt = $this->db->query("SELECT * FROM tasks WHERE id = :id", ['id' => $id]);
+        $stmt = $this->db->query('SELECT * FROM tasks WHERE id = :id', ['id' => $id]);
         $row = $stmt->fetch();
 
         if (!$row) {
@@ -76,10 +76,10 @@ final class TaskSqliteRepository implements TaskRepository
      */
     public function findAll(): array
     {
-        $stmt = $this->db->query("SELECT * FROM tasks ORDER BY id DESC");
+        $stmt = $this->db->query('SELECT * FROM tasks ORDER BY id DESC');
         $row = $stmt->fetch();
 
-        return array_map(fn(array $row) => Task::fromArray($row), $stmt->fetchAll());
+        return array_map(fn (array $row) => Task::fromArray($row), $stmt->fetchAll());
     }
 
     /**
@@ -97,17 +97,17 @@ final class TaskSqliteRepository implements TaskRepository
             'now' => $now->format('Y-m-d H:i:s'),
         ]);
 
-        return array_map(fn(array $row) => Task::fromArray($row), $stmt->fetchAll());
+        return array_map(fn (array $row) => Task::fromArray($row), $stmt->fetchAll());
     }
 
     public function cancelTaskById(int $id): Task
     {
-        $sql = "UPDATE tasks
+        $sql = 'UPDATE tasks
                 SET status = :status,
                     reminder_sent = 1,
                     is_recurring = 0,
                     updated_at = CURRENT_TIMESTAMP
-                WHERE id = :id";
+                WHERE id = :id';
 
         $stmt = $this->db->query($sql, [
             'id' => $id,
@@ -126,12 +126,12 @@ final class TaskSqliteRepository implements TaskRepository
             $nextReminder = $this->calculateNextDate($task->reminderAt, $task->recurrencePattern);
             $followingOccurrence = $this->calculateNextDate($nextReminder, $task->recurrencePattern);
 
-            $sql = "UPDATE tasks
+            $sql = 'UPDATE tasks
                     SET reminder_at = :reminder_at,
                         next_ocurrence_at = :next_ocurrence_at,
                         reminder_sent = 0,
                         updated_at = CURRENT_TIMESTAMP
-                    WHERE id = :id";
+                    WHERE id = :id';
 
             $this->db->query($sql, [
                 'id'                => $id,
@@ -140,10 +140,10 @@ final class TaskSqliteRepository implements TaskRepository
             ]);
         } else {
             // 🛑 Si no es recurrente: marcamos como enviado
-            $sql = "UPDATE tasks
+            $sql = 'UPDATE tasks
                     SET reminder_sent = 1,
                         updated_at = CURRENT_TIMESTAMP
-                    WHERE id = :id";
+                    WHERE id = :id';
 
             $this->db->query($sql, ['id' => $id]);
         }
@@ -153,6 +153,10 @@ final class TaskSqliteRepository implements TaskRepository
         DateTimeImmutable $currentDate,
         RecurrencePatternEnum $pattern,
     ): DateTimeImmutable {
+        if ($pattern === RecurrencePatternEnum::ONCE) {
+            return $currentDate;
+        }
+
         $modifier = match ($pattern) {
             RecurrencePatternEnum::WEEKLY => '+1 week',
             RecurrencePatternEnum::MONTHLY => '+1 month',

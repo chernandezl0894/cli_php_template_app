@@ -2,10 +2,8 @@
 
 namespace App\Tasks\Commands;
 
-use App\Tasks\Enums\StatusEnum;
 use App\Tasks\Repositories\TaskRepository;
 use App\Tasks\Services\TaskService;
-use Core\Database;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

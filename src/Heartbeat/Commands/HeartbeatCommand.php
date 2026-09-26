@@ -75,7 +75,7 @@ final class HeartbeatCommand extends Command
             * ----------------------------------------------------------------------
             * Uso interactivo en desarrollo o inspecciones por CLI.
             */
-            $this->loggerService->info("System running successfully!");
+            $this->loggerService->info('System running successfully!');
             $io->info('Status check (heartbeat) completed.');
         }
 

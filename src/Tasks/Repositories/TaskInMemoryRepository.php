@@ -61,7 +61,7 @@ final class TaskInMemoryRepository implements TaskRepository
      */
     public function findAll(): array
     {
-        return array_map(fn(array $task) => Task::fromArray($task), $this->tasks);
+        return array_map(fn (array $task) => Task::fromArray($task), $this->tasks);
     }
 
     /**
@@ -69,7 +69,7 @@ final class TaskInMemoryRepository implements TaskRepository
      */
     public function findPendingReminders(DateTimeImmutable $now): array
     {
-        $tasks = array_map(fn(array $task) => Task::fromArray($task), $this->tasks);
+        $tasks = array_map(fn (array $task) => Task::fromArray($task), $this->tasks);
         return array_filter($tasks, function (Task $task) use ($now) {
             return $task->reminderAt !== null
                 && $task->reminderAt <= $now
@@ -145,6 +145,10 @@ final class TaskInMemoryRepository implements TaskRepository
         DateTimeImmutable $currentDate,
         RecurrencePatternEnum $pattern,
     ): DateTimeImmutable {
+        if ($pattern === RecurrencePatternEnum::ONCE) {
+            return $currentDate;
+        }
+
         $modifier = match ($pattern) {
             RecurrencePatternEnum::WEEKLY => '+1 week',
             RecurrencePatternEnum::MONTHLY => '+1 month',

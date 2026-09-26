@@ -29,16 +29,16 @@ final class MigrateCommand extends Command
         $io->title('🛠️ SQL Migrations System');
 
         // 1. Crear tabla de control si no existe
-        $this->db->query("
+        $this->db->query('
             CREATE TABLE IF NOT EXISTS migrations (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 migration TEXT NOT NULL UNIQUE,
                 executed_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        ");
+        ');
 
         // 2. Obtener migraciones ya ejecutadas
-        $stmt = $this->db->query("SELECT migration FROM migrations");
+        $stmt = $this->db->query('SELECT migration FROM migrations');
         $executed = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
         // 3. Leer archivos .sql en database/migrations/
@@ -70,7 +70,7 @@ final class MigrateCommand extends Command
                 $pdo->exec($sql);
 
                 // Registrar en la tabla de control
-                $stmt = $pdo->prepare("INSERT INTO migrations (migration) VALUES (:migration)");
+                $stmt = $pdo->prepare('INSERT INTO migrations (migration) VALUES (:migration)');
                 $stmt->execute(['migration' => $filename]);
 
                 $pdo->commit();

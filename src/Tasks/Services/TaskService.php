@@ -32,7 +32,7 @@ final class TaskService
     {
         $task = $this->repository->create($data);
 
-        $this->logger->info("Task created successfully", [
+        $this->logger->info('Task created successfully', [
             'task_id'     => $task->id,
             'title'       => $task->title,
             'status'      => $task->status,

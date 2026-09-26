@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tasks\Commands;
 
-use App\Tasks\Repositories\TaskRepository;
 use App\Tasks\Services\TaskService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -35,7 +34,7 @@ final class ListTasksCommand extends Command
             return Command::SUCCESS;
         }
 
-        $rows = array_map(fn($t) => [
+        $rows = array_map(fn ($t) => [
             $t->id,
             $t->title,
             $t->status->value,

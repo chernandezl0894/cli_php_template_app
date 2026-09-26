@@ -6,8 +6,8 @@ namespace App\Tasks\DTOs;
 
 use App\Tasks\Enums\RecurrencePatternEnum;
 use App\Tasks\Enums\StatusEnum;
-use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeImmutable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[Assert\Expression(
     "this.recurrencePattern.value === 'once' ? this.reminderAt !== null : true",
@@ -15,7 +15,7 @@ use DateTimeImmutable;
 )]
 #[Assert\Expression(
     "this.recurrencePattern.value !== 'once' ? this.isRecurring === true : true",
-    message: "If the frequency is daily, weekly, or monthly, the task must be marked as recurring."
+    message: 'If the frequency is daily, weekly, or monthly, the task must be marked as recurring.'
 )]
 final class CreateTaskData
 {

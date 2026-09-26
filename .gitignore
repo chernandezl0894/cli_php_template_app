@@ -1,5 +1,21 @@
 vendor/
-.env
-.env.production
 
-storage/logs
+# 🏗️ Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
+
+# 🎨 Caché de Herramientas de PHP
+.php-cs-fixer.cache
+.phpunit.result.cache
+.phpstan.cache/
+
+# 🔑 Variables de Entorno Locales y Logs
+.env
+.env.local
+*.log
+storage/logs/*
+!storage/logs/.gitkeep
